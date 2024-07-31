@@ -28,10 +28,10 @@ function Stars:update(dt)
     local stageHeight = Model.stage.stageHeight
     for i=1, numStars do
         local star = starsArr[i]
-        star.y = star.y - self.speed * dt
-        if star.y < 0 then
+        star.y = star.y + self.speed * dt
+        if star.y > stageHeight then
         star.x = math.random() * stageWidth
-        star.y = stageHeight
+        star.y = 0
         end
     end
 end
