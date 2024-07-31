@@ -21,6 +21,9 @@ local LEFT_KEY = "left"
 local RIGHT_KEY = "right"
 local UP_KEY = "up"
 local DOWN_KEY = "down"
+local SPACE_KEY = "space"
+
+bullets = {}
 
 
 function love.load()
@@ -35,6 +38,9 @@ function love.update(dt)
    -- print("update")
     ship:update(dt)
     stars:update(dt)
+    for i = #bullets, 1, -1 do
+        bullets[i]:update(dt)
+    end
 end
 
 
@@ -42,6 +48,9 @@ function love.draw()
     --love.graphics.draw(AssetsManager.sprites.fireAngles, 0,0 )
     stars:draw()
     ship:draw()
+    for _, bullet in ipairs(bullets) do
+        bullet:draw()
+    end
     
     --love.graphics.print("You Win!", 180, 350)
 end
@@ -60,6 +69,10 @@ function love.keypressed(key)
     elseif key == DOWN_KEY then
         Model.movement.down = true
     end
+    
+    if key == SPACE_KEY then
+        Model.movement.space = true
+    end
 
 end
 
@@ -75,6 +88,11 @@ function love.keyreleased(key)
     elseif key == DOWN_KEY then
         Model.movement.down = false
     end
+    
+    if key == SPACE_KEY then
+        Model.movement.space = false
+    end
+    
 end
 
 --

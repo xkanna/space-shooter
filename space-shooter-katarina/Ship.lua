@@ -1,6 +1,7 @@
 local classes = require("classes")
 local Ship = classes.class()
 local Model = require("Model")
+local Bullet = require("Bullet")
 
 function Ship:init(params)
     print("Ship init!")
@@ -13,49 +14,46 @@ function Ship:init(params)
 end
 
 function Ship:update(dt)
-
     local left = Model.movement.left
     local right = Model.movement.right
     local up = Model.movement.up
     local down = Model.movement.down
+    local space = Model.movement.space
     local stageWidth = Model.stage.stageWidth
     local stageHeight = Model.stage.stageHeight
-    
 
     local x = 0
     local y = 0
 
-    if left then
-        if(self.x > self.w / 2) then
-          x = x + -1
-        end
+    if left and self.x > self.w / 2 then
+        x = x - 1
     end
-    if right then
-      if(self.x < stageWidth - (self.w / 2)) then
-          x = x + 1
-        end
+    if right and self.x < stageWidth - self.w / 2 then
+        x = x + 1
     end
+    if up and self.y > self.h / 2 then
+        y = y - 1
+    end
+    if down and self.y < stageHeight - self.h / 2 then
+        y = y + 1
+    end
+    
+    self.x = self.x + x * self.speed * dt
+    self.y = self.y + y * self.speed * dt
+    
+    if space then
+        self:shoot()
+    end
+end
 
-    if up then
-      if(self.y > self.h / 2) then
-          y = y + -1
-        end
-    end
-    if down then
-      if(self.y < stageHeight - (self.h / 2)) then
-          y = y + 1
-        end
-    end
-
-    self.x = self.x + (x * self.speed * dt)
-    self.y = self.y + (y * self.speed * dt)
-
+function Ship:shoot()
+    table.insert(bullets, Bullet:new(self.x, self.y, Model.bulletParams))
 end
 
 function Ship:draw()
-    local newX = self.x - (self.w/2)
-    local newY = self.y - (self.h/2)
-    love.graphics.draw(self.asset, newX,newY )
+    local newX = self.x - (self.w / 2)
+    local newY = self.y - (self.h / 2)
+    love.graphics.draw(self.asset, newX, newY)
 end
 
 return Ship

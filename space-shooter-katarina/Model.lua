@@ -20,6 +20,11 @@ Model.starsParams = {
     numStars = 200
 }
 
+Model.bulletParams = {
+    assetName = "bullet",
+    speed = 100
+}
+
 Model.init = function()
     Model.stage = {
         stageHeight = love.graphics.getHeight(),
@@ -29,7 +34,7 @@ Model.init = function()
     
     --init assets dynamically
     Model.shipParams.asset = AssetsManager.sprites[Model.shipParams.assetName]
-    
+    Model.bulletParams.asset = AssetsManager.sprites[Model.bulletParams.assetName]
     --define enemies here
 
 end
