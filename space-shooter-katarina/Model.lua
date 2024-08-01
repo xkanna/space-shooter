@@ -17,13 +17,21 @@ Model.shipParams = {
 
 Model.starsParams = {
     radius = 1,
-    speed = 100,
+    speed = 60,
     numStars = 200
 }
 
 Model.bulletParams = {
     assetName = "bullet",
     speed = 500
+}
+
+Model.enemiesParams = {
+    assetName = "enemy",
+    radius = 1,
+    speed = 100,
+    maxNumEnemies = 2,
+    spawnRate = 1
 }
 
 Model.init = function()
@@ -36,6 +44,7 @@ Model.init = function()
     --init assets dynamically
     Model.shipParams.asset = AssetsManager.sprites[Model.shipParams.assetName]
     Model.bulletParams.asset = AssetsManager.sprites[Model.bulletParams.assetName]
+    Model.enemiesParams.asset = AssetsManager.sprites[Model.enemiesParams.assetName]
     --define enemies here
 
 end

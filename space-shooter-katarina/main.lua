@@ -14,6 +14,9 @@ local ship = nil
 local StarsCls = require("Stars")
 local stars = nil
 
+local EnemySpawnerCls = require("EnemySpawner")
+local enemySpawner = nil
+
 local AssetsManager = require("AssetsManager")
 local Model = require("Model")
 
@@ -24,6 +27,7 @@ local DOWN_KEY = "down"
 local SPACE_KEY = "space"
 
 bullets = {}
+enemies = {}
 
 
 function love.load()
@@ -32,6 +36,7 @@ function love.load()
     Model.init()
     stars = StarsCls.new( Model.starsParams)
     ship = ShipCls.new( Model.shipParams )
+    enemySpawner = EnemySpawnerCls.new( Model.enemiesParams )
 end
 
 function love.update(dt)
@@ -41,6 +46,7 @@ function love.update(dt)
     for i = #bullets, 1, -1 do
         bullets[i]:update(dt)
     end
+    enemySpawner:update(dt)
 end
 
 
@@ -51,6 +57,7 @@ function love.draw()
     for _, bullet in ipairs(bullets) do
         bullet:draw()
     end
+    enemySpawner:draw()
     
     --love.graphics.print("You Win!", 180, 350)
 end
