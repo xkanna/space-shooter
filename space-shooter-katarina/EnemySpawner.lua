@@ -3,8 +3,6 @@ local EnemySpawner = classes.class()
 
 function EnemySpawner:init(params)
     print("Enemies init!")
-    self.speed = params.speed
-    self.radius = params.radius
     self.asset = params.asset
     self.spawnRate = params.spawnRate
     self.timeSinceLastSpawn = 0 
@@ -13,24 +11,21 @@ function EnemySpawner:init(params)
     local maxNumEnemies = params.maxNumEnemies
     local stageWidth = Model.stage.stageWidth
     local stageHeight = Model.stage.stageHeight
-    
     self.maxNumEnemies = maxNumEnemies
-    self.enemiesArr = {}
     
 end
 
 
 function EnemySpawner:update(dt)
     local maxNumEnemies = self.maxNumEnemies
-    local enemiesArr = self.enemiesArr
     local stageWidth = Model.stage.stageWidth
     local stageHeight = Model.stage.stageHeight
     
-    for i=#enemiesArr, 1, -1 do
-        local enemy = enemiesArr[i]
-        enemy.y = enemy.y + self.speed * dt
+    for i=#enemies, 1, -1 do
+        local enemy = enemies[i]
+        enemy.y = enemy.y + enemy.speed * dt
         if enemy.y > stageHeight then
-            table.remove(enemiesArr, i)
+            table.remove(enemies, i)
         end
     end
 
@@ -48,15 +43,21 @@ function EnemySpawner:spawnEnemies()
     for i=1, numEnemiesToSpawn do
         local x = math.random() * (stageWidth - self.w)
         local y = - self.h
-        local enemy = {x = x, y = y, asset = self.asset}
-        table.insert(self.enemiesArr, enemy)
+        local enemyType = self:getRandomEnemyType()
+        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.w / 2}
+        table.insert(enemies, enemy)
     end
 end
 
+function EnemySpawner:getRandomEnemyType()
+    local enemyTypes = Model.enemyTypes
+    local randomIndex = math.random(1, #enemyTypes)
+    return enemyTypes[randomIndex]
+end
+
 function EnemySpawner:draw()
-    local enemiesArr = self.enemiesArr
-    
-    for _, enemy in ipairs(enemiesArr) do
+  
+    for _, enemy in ipairs(enemies) do
         love.graphics.draw(enemy.asset, enemy.x, enemy.y)
     end
 end

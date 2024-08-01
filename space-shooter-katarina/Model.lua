@@ -28,11 +28,16 @@ Model.bulletParams = {
 
 Model.enemiesParams = {
     assetName = "enemy",
-    radius = 1,
-    speed = 100,
     maxNumEnemies = 2,
     spawnRate = 1
 }
+
+ Model.enemyTypes = {
+    {speed = 100, radius = 15},
+    {speed = 120, radius = 15},
+    {speed = 80, radius = 15}
+}
+    
 
 Model.init = function()
     Model.stage = {

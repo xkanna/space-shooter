@@ -20,6 +20,9 @@ local enemySpawner = nil
 local AssetsManager = require("AssetsManager")
 local Model = require("Model")
 
+local CollisionManagerCls = require("CollisionManager")
+local collisionManager = nil
+
 local LEFT_KEY = "left"
 local RIGHT_KEY = "right"
 local UP_KEY = "up"
@@ -37,6 +40,7 @@ function love.load()
     stars = StarsCls.new( Model.starsParams)
     ship = ShipCls.new( Model.shipParams )
     enemySpawner = EnemySpawnerCls.new( Model.enemiesParams )
+    collisionManager = CollisionManagerCls.new()
 end
 
 function love.update(dt)
@@ -47,6 +51,7 @@ function love.update(dt)
         bullets[i]:update(dt)
     end
     enemySpawner:update(dt)
+    collisionManager:checkCollisions(bullets, enemies)
 end
 
 
@@ -58,7 +63,6 @@ function love.draw()
         bullet:draw()
     end
     enemySpawner:draw()
-    
     --love.graphics.print("You Win!", 180, 350)
 end
 
