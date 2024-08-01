@@ -11,7 +11,8 @@ local Model = {
 
 Model.shipParams = {
     assetName = "ship",
-    speed = 500
+    speed = 500,
+    fireRate = 0.1
 }
 
 Model.starsParams = {
@@ -22,7 +23,7 @@ Model.starsParams = {
 
 Model.bulletParams = {
     assetName = "bullet",
-    speed = 100
+    speed = 500
 }
 
 Model.init = function()

@@ -11,6 +11,8 @@ function Ship:init(params)
     self.y = Model.stage.stageHeight / 2
     self.w = self.asset:getWidth()
     self.h = self.asset:getHeight()
+    self.fireRate = params.fireRate
+    self.timeSinceLastShot = 0 
 end
 
 function Ship:update(dt)
@@ -41,13 +43,15 @@ function Ship:update(dt)
     self.x = self.x + x * self.speed * dt
     self.y = self.y + y * self.speed * dt
     
-    if space then
+    self.timeSinceLastShot = self.timeSinceLastShot + dt
+    if space and self.timeSinceLastShot >= self.fireRate then
         self:shoot()
+        self.timeSinceLastShot = 0
     end
 end
 
 function Ship:shoot()
-    table.insert(bullets, Bullet:new(self.x, self.y, Model.bulletParams))
+    table.insert(bullets, Bullet:new(self.x, self.y - (self.h / 2), Model.bulletParams))
 end
 
 function Ship:draw()
