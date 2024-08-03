@@ -9,20 +9,16 @@ function Ship:init(params)
     self.asset = params.asset
     self.health = params.health
     self.x = Model.stage.stageWidth / 2
-    self.y = Model.stage.stageHeight / 2
+    self.y = Model.stage.stageHeight / 1.5
     self.w = self.asset:getWidth()
     self.h = self.asset:getHeight()
     self.fireRate = params.fireRate
     self.timeSinceLastShot = 0 
     self.radius = self.w / 2
     self.isDamaged = false
-    self.active = true
 end
 
 function Ship:update(dt)
-    if not self.active then
-        return
-    end
     local left = Model.movement.left
     local right = Model.movement.right
     local up = Model.movement.up
@@ -94,7 +90,8 @@ function Ship:draw()
     else
         love.graphics.setColor(1, 1, 1)
     end
-    love.graphics.draw(self.asset, self.x, self.y)
+    
+    love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
     love.graphics.setColor(1, 1, 1) -- this resets color after drawing the ship
 end
 

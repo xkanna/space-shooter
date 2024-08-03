@@ -1,13 +1,13 @@
 local classes = require("classes")
 local Model = require("Model")
+local AssetsManager = require("AssetsManager")
 local Bullet = require("Bullet")
 
 local CollisionManager = classes.class()
 
-function CollisionManager:checkCollisions(bullets, enemies, ship)
-    if not ship.active then
-        return
-    end
+local explosions = {} 
+
+function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
     
     local bulletsToRemove = {}
     local enemiesToRemove = {}
@@ -21,6 +21,7 @@ function CollisionManager:checkCollisions(bullets, enemies, ship)
             if self:checkBulletEnemyCollision(bullet, enemy) then
                 table.insert(bulletsToRemove, i)
                 table.insert(enemiesToRemove, j)
+                createExplosion(enemy.x, enemy.y)
                 break
             end
         end
@@ -39,8 +40,33 @@ function CollisionManager:checkCollisions(bullets, enemies, ship)
         
         if self:checkShipEnemyCollision(ship, enemy) then
             ship:takeDamage(enemy.attackDamage)
+            if not ship.active then
+              createExplosion(enemy.x, enemy.y)
+            end
             table.remove(enemies, i)
             break
+        end
+    end
+    
+    updateExplosions(dt)
+end
+
+function createExplosion(x, y)
+    table.insert(explosions, {
+        x = x,
+        y = y,
+        timer = 0.5, 
+        asset = AssetsManager.sprites.explosion,
+    })
+end
+
+function updateExplosions(dt)
+    for i = #explosions, 1, -1 do
+        local explosion = explosions[i]
+        explosion.timer = explosion.timer - dt 
+
+        if explosion.timer <= 0 then
+            table.remove(explosions, i)
         end
     end
 end
@@ -59,6 +85,14 @@ function CollisionManager:checkShipEnemyCollision(ship, enemy)
     local distance = math.sqrt(dx * dx + dy * dy)
     
     return distance < (ship.radius + enemy.radius)
+end
+
+function CollisionManager:draw()
+    for _, explosion in ipairs(explosions) do
+        local w = explosion.asset:getWidth()
+        local h = explosion.asset:getHeight()
+        love.graphics.draw(explosion.asset, explosion.x - w / 2, explosion.y - h / 2)
+    end
 end
 
 return CollisionManager

@@ -21,7 +21,7 @@ end
 
 
 function Bullet:draw()
-    love.graphics.draw(self.asset, self.x, self.y)
+    love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
 end
 
 return Bullet

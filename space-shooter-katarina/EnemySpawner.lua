@@ -59,7 +59,7 @@ end
 function EnemySpawner:draw()
   
     for _, enemy in ipairs(enemies) do
-        love.graphics.draw(enemy.asset, enemy.x, enemy.y)
+        love.graphics.draw(enemy.asset, enemy.x - self.w / 2, enemy.y - self.h / 2)
     end
 end
 
