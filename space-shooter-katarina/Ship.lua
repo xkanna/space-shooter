@@ -1,7 +1,7 @@
 local classes = require("classes")
 local Ship = classes.class()
 local Model = require("Model")
-local Bullet = require("Bullet")
+local BulletSpawner = require("BulletSpawner")
 
 function Ship:init(params)
     print("Ship init!")
@@ -72,7 +72,7 @@ function Ship:shoot()
     if not self.active then
         return
     end
-    table.insert(bullets, Bullet:new(self.x, self.y - (self.h / 2), Model.bulletParams))
+    BulletSpawner:shoot(self.x, self.y - (self.h / 2))
 end
 
 function Ship:takeDamage(damage)
