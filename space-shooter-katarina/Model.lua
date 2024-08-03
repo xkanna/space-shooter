@@ -12,7 +12,8 @@ local Model = {
 Model.shipParams = {
     assetName = "ship",
     speed = 500,
-    fireRate = 0.1
+    fireRate = 0.1,
+    health = 100
 }
 
 Model.starsParams = {
@@ -33,9 +34,9 @@ Model.enemiesParams = {
 }
 
  Model.enemyTypes = {
-    {speed = 100, radius = 15},
-    {speed = 120, radius = 15},
-    {speed = 80, radius = 15}
+    {speed = 100, attackDamage = 35},
+    {speed = 120, attackDamage = 40},
+    {speed = 80, attackDamage = 20}
 }
     
 

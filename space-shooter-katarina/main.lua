@@ -51,7 +51,7 @@ function love.update(dt)
         bullets[i]:update(dt)
     end
     enemySpawner:update(dt)
-    collisionManager:checkCollisions(bullets, enemies)
+    collisionManager:checkCollisions(bullets, enemies, ship)
 end
 
 

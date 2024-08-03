@@ -8,6 +8,7 @@ function Bullet:init(x, y, params)
     self.asset = params.asset
     self.w = self.asset:getWidth()
     self.h = self.asset:getHeight()
+    self.radius = self.w / 2
 end
 
 function Bullet:new(x, y, params)
@@ -17,7 +18,8 @@ function Bullet:new(x, y, params)
         speed = params.speed,
         asset = params.asset,
         w = params.asset:getWidth(),
-        h = params.asset:getHeight()
+        h = params.asset:getHeight(),
+        radius = params.asset:getWidth() / 2
     }
     setmetatable(bullet, { __index = Bullet })
     return bullet

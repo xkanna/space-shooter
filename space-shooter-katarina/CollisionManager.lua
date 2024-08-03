@@ -4,7 +4,10 @@ local Bullet = require("Bullet")
 
 local CollisionManager = classes.class()
 
-function CollisionManager:checkCollisions(bullets, enemies)
+function CollisionManager:checkCollisions(bullets, enemies, ship)
+    if not ship.active then
+        return
+    end
     for i = #bullets, 1, -1 do
         local bullet = bullets[i]
         
@@ -18,13 +21,32 @@ function CollisionManager:checkCollisions(bullets, enemies)
             end
         end
     end
+    
+    for i = #enemies, 1, -1 do
+        local enemy = enemies[i]
+        
+        if self:checkShipEnemyCollision(ship, enemy) then
+            ship:takeDamage(enemy.attackDamage)
+            table.remove(enemies, i)
+            break
+        end
+    end
 end
 
 function CollisionManager:checkBulletEnemyCollision(bullet, enemy)
-    return bullet.x < enemy.x + enemy.radius and
-           bullet.x + bullet.w > enemy.x - enemy.radius and
-           bullet.y < enemy.y + enemy.radius and
-           bullet.y + bullet.h > enemy.y - enemy.radius
+    local dx = bullet.x - enemy.x
+    local dy = bullet.y - enemy.y
+    local distance = math.sqrt(dx * dx + dy * dy)
+    
+    return distance < (bullet.radius + enemy.radius)
+end
+
+function CollisionManager:checkShipEnemyCollision(ship, enemy)
+    local dx = ship.x - enemy.x
+    local dy = ship.y - enemy.y
+    local distance = math.sqrt(dx * dx + dy * dy)
+    
+    return distance < (ship.radius + enemy.radius)
 end
 
 return CollisionManager

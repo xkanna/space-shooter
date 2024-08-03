@@ -44,7 +44,7 @@ function EnemySpawner:spawnEnemies()
         local x = math.random() * (stageWidth - self.w)
         local y = - self.h
         local enemyType = self:getRandomEnemyType()
-        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.w / 2}
+        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.w / 2, attackDamage = enemyType.attackDamage}
         table.insert(enemies, enemy)
     end
 end
