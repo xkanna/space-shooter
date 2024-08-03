@@ -8,18 +8,30 @@ function CollisionManager:checkCollisions(bullets, enemies, ship)
     if not ship.active then
         return
     end
+    
+    local bulletsToRemove = {}
+    local enemiesToRemove = {}
+    
     for i = #bullets, 1, -1 do
         local bullet = bullets[i]
         
         for j = #enemies, 1, -1 do
             local enemy = enemies[j]
-
+            
             if self:checkBulletEnemyCollision(bullet, enemy) then
-                table.remove(bullets, i)
-                table.remove(enemies, j)
-                break 
+                table.insert(bulletsToRemove, i)
+                table.insert(enemiesToRemove, j)
+                break
             end
         end
+    end
+    
+    for _, i in ipairs(bulletsToRemove) do
+        table.remove(bullets, i)
+    end
+    
+    for _, j in ipairs(enemiesToRemove) do
+        table.remove(enemies, j)
     end
     
     for i = #enemies, 1, -1 do

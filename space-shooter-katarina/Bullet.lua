@@ -42,9 +42,7 @@ function Bullet:delete()
 end
 
 function Bullet:draw()
-    local newX = self.x - (self.w / 2)
-    local newY = self.y - (self.h / 2)
-    love.graphics.draw(self.asset, newX, newY)
+    love.graphics.draw(self.asset, self.x, self.y)
 end
 
 return Bullet

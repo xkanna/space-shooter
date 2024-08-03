@@ -8,11 +8,12 @@ function EnemySpawner:init(params)
     self.timeSinceLastSpawn = 0 
     self.w = self.asset:getWidth()
     self.h = self.asset:getHeight()
+    self.x = 0
     local maxNumEnemies = params.maxNumEnemies
     local stageWidth = Model.stage.stageWidth
     local stageHeight = Model.stage.stageHeight
     self.maxNumEnemies = maxNumEnemies
-    
+    self.radius = self.w / 2
 end
 
 
@@ -44,7 +45,7 @@ function EnemySpawner:spawnEnemies()
         local x = math.random() * (stageWidth - self.w)
         local y = - self.h
         local enemyType = self:getRandomEnemyType()
-        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.w / 2, attackDamage = enemyType.attackDamage}
+        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.radius, attackDamage = enemyType.attackDamage}
         table.insert(enemies, enemy)
     end
 end

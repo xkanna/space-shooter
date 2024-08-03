@@ -13,6 +13,7 @@ Model.shipParams = {
     assetName = "ship",
     speed = 500,
     fireRate = 0.1,
+    attackDamage = 10,
     health = 100
 }
 
