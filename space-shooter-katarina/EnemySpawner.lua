@@ -1,6 +1,7 @@
 local Model = require("Model")
 local GameController = require("GameController")
 local EnemySpawner = classes.class()
+local Enemy = require("Enemy")
 
 function EnemySpawner:init(params)
     print("Enemies init!")
@@ -31,6 +32,7 @@ function EnemySpawner:update(dt)
     
     for i=#enemies, 1, -1 do
         local enemy = enemies[i]
+        enemy:update(dt)
         enemy.y = enemy.y + enemy.speed * dt
         if enemy.y > stageHeight then
             table.remove(enemies, i)
@@ -52,8 +54,7 @@ function EnemySpawner:spawnEnemies()
         local x = math.random() * (stageWidth - self.w)
         local y = - self.h
         local enemyType = self:getRandomEnemyType()
-        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.radius, health = enemyType.health, points = enemyType.points}
-        table.insert(enemies, enemy)
+        table.insert(enemies, Enemy:new(x, y, self.asset, self.radius, enemyType))
     end
 end
 
@@ -73,7 +74,7 @@ end
 function EnemySpawner:draw()
   
     for _, enemy in ipairs(enemies) do
-        love.graphics.draw(enemy.asset, enemy.x - self.w / 2, enemy.y - self.h / 2)
+        enemy:draw()
     end
 end
 

@@ -20,10 +20,13 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
             local enemy = enemies[j]
             
             if self:checkBulletEnemyCollision(bullet, enemy) then
-                table.insert(bulletsToRemove, i)
-                table.insert(enemiesToRemove, j)
-                createExplosion(enemy.x, enemy.y)
+                local isEnemyDead = enemy:takeDamage()
+                if isEnemyDead then 
+                  table.insert(enemiesToRemove, j)
+                  createExplosion(enemy.x, enemy.y)
                 GameController.instance:addPoints(enemy.points)
+                end
+                table.insert(bulletsToRemove, i)
                 break
             end
         end
