@@ -8,6 +8,9 @@ io.stdout:setvbuf("no")
 
 ----EXAMPLES: INSTANTIARING A CLASS
 
+local GameControllerCls = require("GameController")
+local gameController = nil
+
 local ShipCls = require("Ship")
 local ship = nil
 
@@ -37,73 +40,47 @@ local SPACE_KEY = "space"
 bullets = {}
 enemies = {}
 
-
 function love.load()
     print("love.load")
     AssetsManager.init()
     Model.init()
+    gameController = GameControllerCls.new( Model.gameParams )
     stars = StarsCls.new( Model.starsParams)
     ship = ShipCls.new( Model.shipParams )
     enemySpawner = EnemySpawnerCls.new( Model.enemiesParams )
     bulletSpawner = BulletSpawnerCls.new()
     collisionManager = CollisionManagerCls.new()
     uiManager = UiManager:new()
-    lives = 3
-    setupUi()
-end
-
-function setupUi()
-  local playButton = uiManager:addButton{
-        uiManager = uiManager,
-        x = 100,
-        y = 400,
-        width = 200,
-        height = 50,
-        text = "Play"
-    }
-    
-    playButton.onClick = function()
-      ship.active = true
-      playButton.y = -500 
-      levelLabel.y = -500
-    end
-    
-    livesLabel = uiManager:addLabel{
-        x = 10,
-        y = 10,
-        text = "Lives: " .. lives,
-    }
-    
-    levelLabel = uiManager:addLabel{
-        x = Model.stage.stageWidth / 2 - 50,
-        y = Model.stage.stageHeight / 2 - 50,
-        text = "Level: " .. 1,
-    }
 end
 
 function love.update(dt)
    -- print("update")
+    gameController:update(dt)
     uiManager:update(dt)
     stars:update(dt)
     collisionManager:checkCollisions(bullets, enemies, ship, dt)
     
-    if not ship.active then
+    if gameController:getGameState() ~= "playing" then
         return
     end
+    
     ship:update(dt)
     bulletSpawner:update(dt)
     enemySpawner:update(dt)
+    
+  
 end
 
 
 function love.draw()
     --love.graphics.draw(AssetsManager.sprites.fireAngles, 0,0 )
+    gameController:draw()
     stars:draw()
-    ship:draw()
     bulletSpawner:draw()
     enemySpawner:draw()
     collisionManager:draw()
     uiManager:draw()
+    ship:draw()
     --love.graphics.print("You Win!", 180, 350)
 end
 

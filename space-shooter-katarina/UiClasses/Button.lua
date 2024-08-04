@@ -10,7 +10,8 @@ function Button:new(params)
       height = params.height,
       text = params.text,
       onClick = params.onClick,
-      isHovered = false
+      isHovered = false,
+      active = true
     }
     setmetatable(button, { __index = Button })
     return button
@@ -26,6 +27,9 @@ function Button:update(dt)
 end
 
 function Button:draw()
+    if not self.active then
+        return
+    end
     if self.isHovered then
         love.graphics.setColor(0.8, 0.8, 0.8)
     else

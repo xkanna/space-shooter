@@ -1,4 +1,5 @@
 local Model = require("Model")
+local GameController = require("GameController")
 local EnemySpawner = classes.class()
 
 function EnemySpawner:init(params)
@@ -14,6 +15,12 @@ function EnemySpawner:init(params)
     local stageHeight = Model.stage.stageHeight
     self.maxNumEnemies = maxNumEnemies
     self.radius = self.w / 2
+    
+    GameController.instance:addListener(function(newState)
+        if newState == "start" then
+            self:removeAllEnemies()
+        end
+    end)
 end
 
 
@@ -45,7 +52,7 @@ function EnemySpawner:spawnEnemies()
         local x = math.random() * (stageWidth - self.w)
         local y = - self.h
         local enemyType = self:getRandomEnemyType()
-        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.radius, attackDamage = enemyType.attackDamage}
+        local enemy = {x = x, y = y, asset = self.asset, speed = enemyType.speed, radius = self.radius, health = enemyType.health, points = enemyType.points}
         table.insert(enemies, enemy)
     end
 end
@@ -54,6 +61,13 @@ function EnemySpawner:getRandomEnemyType()
     local enemyTypes = Model.enemyTypes
     local randomIndex = math.random(1, #enemyTypes)
     return enemyTypes[randomIndex]
+end
+
+function EnemySpawner:removeAllEnemies()
+    for i=#enemies, 1, -1 do
+        local enemy = enemies[i]
+        table.remove(enemies, i)
+    end
 end
 
 function EnemySpawner:draw()

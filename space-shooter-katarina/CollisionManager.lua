@@ -1,5 +1,6 @@
 local classes = require("classes")
 local Model = require("Model")
+local GameController = require("GameController")
 local AssetsManager = require("AssetsManager")
 local Bullet = require("Bullet")
 
@@ -22,6 +23,7 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
                 table.insert(bulletsToRemove, i)
                 table.insert(enemiesToRemove, j)
                 createExplosion(enemy.x, enemy.y)
+                GameController.instance:addPoints(enemy.points)
                 break
             end
         end
@@ -39,8 +41,9 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
         local enemy = enemies[i]
         
         if self:checkShipEnemyCollision(ship, enemy) then
-            ship:takeDamage(enemy.attackDamage)
-            if not ship.active then
+            ship:takeDamage()
+            GameController.instance:removeLife()
+            if GameController.instance:getLives() <= 0 then
               createExplosion(enemy.x, enemy.y)
             end
             table.remove(enemies, i)

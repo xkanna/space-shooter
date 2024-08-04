@@ -1,11 +1,49 @@
 local classes = require("classes")
+local Model = require("Model")
 local Button = require("UiClasses.Button")
 local Label = require("UiClasses.Label")
+local GameController = require("GameController")
 
 local UiManager = classes.class()
 
 function UiManager:init()
     self.elements = {}
+    self:setupUi()
+end
+
+function UiManager:setupUi()
+    local playButton = self:addButton{
+        x = 100,
+        y = 400,
+        width = 200,
+        height = 50,
+        text = "Play"
+    }
+    
+    playButton.onClick = function()
+      GameController.instance:startGame()
+      playButton.active = false
+      levelLabel.active = false
+    end
+    
+    livesLabel = self:addLabel{
+        x = 10,
+        y = 10,
+        text = "Lives: " .. GameController.instance:getLives()
+    }
+    
+    levelLabel = self:addLabel{
+        x = Model.stage.stageWidth / 2 - 50,
+        y = Model.stage.stageHeight / 2 - 50,
+        text = "Level: " .. 1,
+    }
+    
+    GameController.instance:addListener(function(newState)
+        if newState == "start" then
+            playButton.active = true
+            levelLabel.active = true
+        end
+    end)
 end
 
 function UiManager:addButton(params)
@@ -30,6 +68,7 @@ function UiManager:removeElement(element)
 end
 
 function UiManager:update(dt)
+    livesLabel:setText("Lives: " .. GameController.instance:getLives())
     for _, element in ipairs(self.elements) do
         if element.update then
             element:update(dt)

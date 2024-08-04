@@ -9,6 +9,11 @@ local Model = {
     }
 }
 
+Model.gameParams = {
+    lives = 3,
+    winningScore = 50
+}
+
 Model.shipParams = {
     assetName = "ship",
     speed = 500,
@@ -35,9 +40,9 @@ Model.enemiesParams = {
 }
 
  Model.enemyTypes = {
-    {speed = 100, attackDamage = 35},
-    {speed = 120, attackDamage = 40},
-    {speed = 80, attackDamage = 20}
+    {speed = 100, points = 2, health = 2},
+    {speed = 120, points = 3, health = 3},
+    {speed = 80,points = 1, health = 1}
 }
     
 

@@ -1,4 +1,5 @@
 local classes = require("classes")
+local GameController = require("GameController")
 local Ship = classes.class()
 local Model = require("Model")
 local BulletSpawner = require("BulletSpawner")
@@ -7,7 +8,8 @@ function Ship:init(params)
     print("Ship init!")
     self.speed = params.speed
     self.asset = params.asset
-    self.health = params.health
+    self.maxHealth = params.health
+    self.currentHealth = params.health
     self.x = Model.stage.stageWidth / 2
     self.y = Model.stage.stageHeight / 1.5
     self.w = self.asset:getWidth()
@@ -16,6 +18,14 @@ function Ship:init(params)
     self.timeSinceLastShot = 0 
     self.radius = self.w / 2
     self.isDamaged = false
+    
+    GameController.instance:addListener(function(newState)
+        if newState == "playing" then
+            self:activate()
+        elseif newState == "start" then
+            self:deactivate()
+        end
+    end)
 end
 
 function Ship:update(dt)
@@ -71,15 +81,21 @@ function Ship:shoot()
     BulletSpawner:shoot(self.x, self.y - (self.h / 2))
 end
 
-function Ship:takeDamage(damage)
-  self.health = self.health - damage
+function Ship:takeDamage()
   self.isDamaged = true
   self.redTimer = 0.3
-  if(self.health <= 0) then
-    self.active = false
-  end
 end
-    
+
+function Ship:deactivate()
+  self.active = false
+end
+
+function Ship:activate()
+  self.active = true
+  self.x = Model.stage.stageWidth / 2
+  self.y = Model.stage.stageHeight / 1.5
+  self.currentHealth = self.maxHealth
+end
 
 function Ship:draw()
     if not self.active then
