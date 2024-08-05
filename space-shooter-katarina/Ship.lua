@@ -86,6 +86,10 @@ function Ship:takeDamage()
   self.redTimer = 0.3
 end
 
+function Ship:collect(collectable)
+    print("Collected a collectable!")
+end
+
 function Ship:deactivate()
   self.active = false
 end

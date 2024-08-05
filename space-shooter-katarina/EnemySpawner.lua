@@ -2,6 +2,10 @@ local Model = require("Model")
 local GameController = require("GameController")
 local EnemySpawner = classes.class()
 local Enemy = require("Enemy")
+local levels = require("Levels")
+
+local timer = 0
+local waitTime = 7 
 
 function EnemySpawner:init(params)
     print("Enemies init!")
@@ -11,52 +15,90 @@ function EnemySpawner:init(params)
     self.w = self.asset:getWidth()
     self.h = self.asset:getHeight()
     self.x = 0
-    local maxNumEnemies = params.maxNumEnemies
-    local stageWidth = Model.stage.stageWidth
-    local stageHeight = Model.stage.stageHeight
+    self.maxNumEnemies = params.maxNumEnemies
+    self.stageWidth = Model.stage.stageWidth
+    self.stageHeight = Model.stage.stageHeight
     self.maxNumEnemies = maxNumEnemies
+    self.enemies = enemies
     self.radius = self.w / 2
+    self.waveConfig = levels[GameController.instance:getCurrentLevel()].waves
+    self.currentWave = 1
+    self.isPaused = false
     
     GameController.instance:addListener(function(newState)
         if newState == "start" then
             self:removeAllEnemies()
+            self.currentWave = 1
+            local level = GameController.instance:getCurrentLevel()
+            if(level > #levels) then
+              level = 1
+            end
+            self.waveConfig = levels[level].waves
+            self.isPaused = false
         end
     end)
 end
 
 
 function EnemySpawner:update(dt)
-    local maxNumEnemies = self.maxNumEnemies
-    local stageWidth = Model.stage.stageWidth
-    local stageHeight = Model.stage.stageHeight
+    if GameController.instance:getGameState() ~= "playing" then
+        return
+    end
     
-    for i=#enemies, 1, -1 do
-        local enemy = enemies[i]
+    if self.isPaused then
+      timer = timer + dt
+      if timer >= waitTime then
+        GameController.instance:winGame()
+        timer = 0
+      end
+    else
+      self.timeSinceLastSpawn = self.timeSinceLastSpawn + dt
+      if self.timeSinceLastSpawn >= self.spawnRate then
+          self:spawnWave(self.currentWave)
+          self.timeSinceLastSpawn = 0
+          self.currentWave = self.currentWave + 1
+          if self.currentWave > #self.waveConfig then
+              self.isPaused = true
+              self.currentWave = 1
+          end
+      end
+    end
+    
+    for i=#self.enemies, 1, -1 do
+        local enemy = self.enemies[i]
         enemy:update(dt)
         enemy.y = enemy.y + enemy.speed * dt
-        if enemy.y > stageHeight then
-            table.remove(enemies, i)
+        if enemy.y > self.stageHeight then
+            table.remove(self.enemies, i)
         end
     end
-
-    self.timeSinceLastSpawn = self.timeSinceLastSpawn + dt
-    if self.timeSinceLastSpawn >= self.spawnRate then
-        self:spawnEnemies()
-        self.timeSinceLastSpawn = 0
-    end
 end
 
-function EnemySpawner:spawnEnemies()
-    local stageWidth = Model.stage.stageWidth
-    local numEnemiesToSpawn = math.random(0, self.maxNumEnemies)
-
-    for i=1, numEnemiesToSpawn do
-        local x = math.random() * (stageWidth - self.w)
-        local y = - self.h
+function EnemySpawner:spawnWave(waveIndex)
+  
+    local lines = self.waveConfig[waveIndex].lines
+    local count = #lines
+    for i=1, count do
+        local position = lines[i].position
+        local x = self:getSpawnX(position)
+        local y = -self.h
         local enemyType = self:getRandomEnemyType()
-        table.insert(enemies, Enemy:new(x, y, self.asset, self.radius, enemyType))
+        table.insert(self.enemies, Enemy:new(x, y, self.asset, self.radius, enemyType))
     end
 end
+
+function EnemySpawner:getSpawnX(position)
+    if position == "left" then
+        return math.random(self.w, self.stageWidth / 3)
+    elseif position == "right" then
+        return math.random(2 * self.stageWidth / 3, self.stageWidth)
+    elseif position == "center" then
+        return math.random(self.stageWidth / 3, 2 * self.stageWidth / 3)
+    else
+        return math.random(0, self.stageWidth)
+    end
+end
+
 
 function EnemySpawner:getRandomEnemyType()
     local enemyTypes = Model.enemyTypes

@@ -11,7 +11,6 @@ function BulletSpawner:init()
     end)
 end
 
-
 function BulletSpawner:update(dt)
   for i = #bullets, 1, -1 do
         local bullet = bullets[i]

@@ -9,6 +9,8 @@ function GameController:init(params)
 
     self.gameState = "start"
     self.playerScore = 0
+    self.goldCollected = 0
+    self.currentLevel = 1
     self.winningScore = params.winningScore
     self.lives = params.lives
     self.currentLives = params.lives
@@ -20,11 +22,7 @@ end
 
 function GameController:update(dt)
     if self.gameState == "playing" then
-        if self.playerScore >= self.winningScore then
-            self.gameState = "won"
-            self:notifyListeners("won")
-            self:resetGame()
-        elseif self.currentLives <= 0 then
+        if self.currentLives <= 0 then
             self.gameState = "lost"
             self:notifyListeners("lost")
             self:resetGame()
@@ -34,12 +32,19 @@ end
 
 function GameController:draw()
     if self.gameState == "playing" then
-        love.graphics.print("Score: " .. math.floor(self.playerScore), 10, 30)
+        love.graphics.print("Score: " .. math.floor(self.playerScore), 10, 50)
     elseif self.gameState == "won" then
         love.graphics.print("You won! Final Score: " .. math.floor(self.playerScore), Model.stage.stageWidth / 2 - 100, Model.stage.stageHeight / 2 -100)
     elseif self.gameState == "lost" then
         love.graphics.print("You lost! Final Score: " .. math.floor(self.playerScore), Model.stage.stageWidth / 2 - 100, Model.stage.stageHeight / 2- 100)
     end
+end
+
+function GameController:winGame()
+      self.gameState = "won"
+      self.currentLevel = self.currentLevel + 1
+      self:notifyListeners("won")
+      self:resetGame()
 end
 
 function GameController:resetGame()
@@ -61,12 +66,24 @@ function GameController:getLives()
     return self.currentLives
 end
 
+function GameController:getGold()
+    return self.goldCollected
+end
+
 function GameController:getGameState()
     return self.gameState
 end
 
+function GameController:getCurrentLevel()
+    return self.currentLevel
+end
+
 function GameController:addPoints(points)
     self.playerScore = self.playerScore + points
+end
+
+function GameController:addGold(amount)
+    self.goldCollected = self.goldCollected + amount
 end
 
 function GameController:notifyListeners(newState)

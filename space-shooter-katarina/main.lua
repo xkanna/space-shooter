@@ -59,6 +59,7 @@ function love.update(dt)
     uiManager:update(dt)
     stars:update(dt)
     collisionManager:checkCollisions(bullets, enemies, ship, dt)
+    collisionManager:updateCollectables(dt)
     
     if gameController:getGameState() ~= "playing" then
         return
@@ -67,7 +68,6 @@ function love.update(dt)
     ship:update(dt)
     bulletSpawner:update(dt)
     enemySpawner:update(dt)
-    
   
 end
 
@@ -86,7 +86,7 @@ end
 
 
 function love.keypressed(key)
-    print(key)
+    --print(key)
     if key == LEFT_KEY then
         Model.movement.left = true
     elseif key == RIGHT_KEY then

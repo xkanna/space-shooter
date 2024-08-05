@@ -12,7 +12,7 @@ function UiManager:init()
 end
 
 function UiManager:setupUi()
-    local playButton = self:addButton{
+    playButton = self:addButton{
         x = 100,
         y = 400,
         width = 200,
@@ -35,13 +35,21 @@ function UiManager:setupUi()
     levelLabel = self:addLabel{
         x = Model.stage.stageWidth / 2 - 50,
         y = Model.stage.stageHeight / 2 - 50,
-        text = "Level: " .. 1,
+        text = "Level: " .. GameController.instance:getCurrentLevel(),
+    }
+    
+    goldLabel = self:addLabel{
+        x = 10,
+        y = 30,
+        text = "Gold: " .. GameController.instance:getGold()
     }
     
     GameController.instance:addListener(function(newState)
         if newState == "start" then
             playButton.active = true
             levelLabel.active = true
+            local level = GameController.instance:getCurrentLevel()
+            levelLabel:setText("Level: " .. level)
         end
     end)
 end
@@ -69,6 +77,7 @@ end
 
 function UiManager:update(dt)
     livesLabel:setText("Lives: " .. GameController.instance:getLives())
+    goldLabel:setText("Gold: " .. GameController.instance:getGold())
     for _, element in ipairs(self.elements) do
         if element.update then
             element:update(dt)
