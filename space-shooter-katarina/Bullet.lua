@@ -1,7 +1,7 @@
 local classes = require("classes")
 local Bullet = classes.class()
 
-function Bullet:new(x, y, params)
+function Bullet:new(x, y, angle, params)
     local bullet = {
         x = x,
         y = y,
@@ -9,14 +9,16 @@ function Bullet:new(x, y, params)
         asset = params.asset,
         w = params.asset:getWidth(),
         h = params.asset:getHeight(),
-        radius = params.asset:getWidth() / 2
+        radius = params.asset:getWidth() / 2,
+        angle = math.rad(angle)
     }
     setmetatable(bullet, { __index = Bullet })
     return bullet
 end
 
 function Bullet:update(dt)
-    self.y = self.y - self.speed * dt
+    self.x = self.x + math.cos(self.angle) * self.speed * dt
+    self.y = self.y - math.sin(self.angle) * self.speed * dt
 end
 
 

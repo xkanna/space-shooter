@@ -25,8 +25,11 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
                 if isEnemyDead then 
                     table.insert(enemiesToRemove, j)
                     createExplosion(enemy.x, enemy.y)
-                    GameController.instance:addPoints(enemy.points)
-                    spawnCollectable(enemy.x, enemy.y)
+                    local collectable = spawnCollectable(enemy.x, enemy.y)
+                    if collectable.type == "regular" then
+                      GameController.instance:addPoints(enemy.points)
+                    end
+                    ship:collect(collectable)
                 end
                 table.insert(bulletsToRemove, i)
                 break
@@ -47,7 +50,6 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
         
         if self:checkShipEnemyCollision(ship, enemy) then
             ship:takeDamage()
-            GameController.instance:removeLife()
             if GameController.instance:getLives() <= 0 then
                 createExplosion(enemy.x, enemy.y)
             end
@@ -57,13 +59,25 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
     end
     
     self:checkCollectableShipCollision(ship)
+    self:updateCollectables(collectables, ship,  dt)
     updateExplosions(dt)
 end
 
 function spawnCollectable(x, y)
     local asset = AssetsManager.sprites.coin
     local collectable = Collectable:init(x, y, asset)
+    
+    local chance = math.random()
+    if chance <= 0.1 then
+        local powerUpType = Model.powerUpTypes[math.random(#Model.powerUpTypes)]
+        collectable.type = powerUpType.name
+        collectable.asset = AssetsManager.sprites[powerUpType.assetName]
+    else
+        collectable.type = "regular" 
+    end
+    
     table.insert(collectables, collectable)
+    return collectable
 end
 
 function CollisionManager:checkCollectableShipCollision(ship)
@@ -74,16 +88,37 @@ function CollisionManager:checkCollectableShipCollision(ship)
         local dy = ship.y - collectable.y
         local distance = math.sqrt(dx * dx + dy * dy)
         
-        if distance < (ship.radius + collectable.radius) then
-            GameController.instance:addGold(1)
-            table.remove(collectables, i)
+        if distance < (ship.coinRadius + collectable.radius) then
+            collectable.isCollected = true
         end
     end
 end
 
-function CollisionManager:updateCollectables(dt)
-    for _, collectable in ipairs(collectables) do
-        collectable:update(dt)
+
+function CollisionManager:updateCollectables(collectables, ship, dt)
+    local speed = 500  -
+
+    for i = #collectables, 1, -1 do
+        local collectable = collectables[i]
+        if collectable.isCollected then
+            local dx = ship.x - collectable.x
+            local dy = ship.y - collectable.y
+            
+            -- Calculate the angle to the ship
+            local angle = math.atan2(dy, dx)
+            
+            -- Update the position using the constant speed
+            collectable.x = collectable.x + math.cos(angle) * speed * dt
+            collectable.y = collectable.y + math.sin(angle) * speed * dt
+            
+            -- Check if the collectable is close enough to the ship
+            if math.abs(dx) < 5 and math.abs(dy) < 5 then
+                GameController.instance:addGold(1)
+                table.remove(collectables, i)
+            end
+        else
+            collectable:update(dt)
+        end
     end
 end
 

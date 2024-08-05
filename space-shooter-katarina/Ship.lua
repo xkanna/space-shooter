@@ -1,8 +1,10 @@
 local classes = require("classes")
 local GameController = require("GameController")
+local AssetsManager = require("AssetsManager")
 local Ship = classes.class()
 local Model = require("Model")
 local BulletSpawner = require("BulletSpawner")
+local PowerUpManager = require("PowerUpManager")
 
 function Ship:init(params)
     print("Ship init!")
@@ -17,7 +19,13 @@ function Ship:init(params)
     self.fireRate = params.fireRate
     self.timeSinceLastShot = 0 
     self.radius = self.w / 2
+    self.coinRadius = self.w / 2
     self.isDamaged = false
+    self.tripleShot = false
+    self.tripleShotWide = false
+    self.shieldActive = false
+    self.magnetActive = false
+    self.shieldSprites = {} 
     
     GameController.instance:addListener(function(newState)
         if newState == "playing" then
@@ -62,6 +70,10 @@ function Ship:update(dt)
         self.timeSinceLastShot = 0
     end
     self:checkIfDamaged(dt)
+    
+    if self.shieldActive then
+        self:updateShield(dt)
+    end
 end
 
 function Ship:checkIfDamaged(dt)
@@ -78,16 +90,39 @@ function Ship:shoot()
     if not self.active then
         return
     end
-    BulletSpawner:shoot(self.x, self.y - (self.h / 2))
+    
+    if self.tripleShot then
+        BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
+        BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 90)
+        BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 90)
+    elseif self.tripleShotWide then
+        BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 150)
+        BulletSpawner:shoot(self.x , self.y - (self.h / 2), 90)
+        BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 30)
+    else
+        BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
+    end
 end
 
 function Ship:takeDamage()
+  if self.shieldActive then
+    return
+  end
   self.isDamaged = true
   self.redTimer = 0.3
+  GameController.instance:removeLife()
 end
 
 function Ship:collect(collectable)
-    print("Collected a collectable!")
+    if collectable.type == "triple_shot" then
+        PowerUpManager:activatePowerUp(self, "triple_shot", 5)
+    elseif collectable.type == "fire_rate_boost" then
+        PowerUpManager:activatePowerUp(self, "fire_rate_boost", 5)
+    elseif collectable.type == "shield" then
+        PowerUpManager:activatePowerUp(self, "shield", 5)
+    elseif collectable.type == "magnet" then
+        PowerUpManager:activatePowerUp(self, "magnet", 5) 
+    end
 end
 
 function Ship:deactivate()
@@ -112,7 +147,32 @@ function Ship:draw()
     end
     
     love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
+    if self.shieldActive then
+        self:drawShield()
+    end
+    
     love.graphics.setColor(1, 1, 1) -- this resets color after drawing the ship
+end
+
+function Ship:updateShield(dt)
+    local shieldSpeed = 2 * math.pi 
+    local numShields = 3 
+    local shieldRadius = self.w 
+
+    self.shieldSprites = {}
+    for i = 1, numShields do
+        local angle = (i - 1) * (2 * math.pi / numShields) + love.timer.getTime() * shieldSpeed
+        local shieldX = self.x + math.cos(angle) * shieldRadius
+        local shieldY = self.y + math.sin(angle) * shieldRadius
+        table.insert(self.shieldSprites, {x = shieldX, y = shieldY})
+    end
+end
+
+function Ship:drawShield()
+    local shieldAsset = AssetsManager.sprites.shield
+    for _, shield in ipairs(self.shieldSprites) do
+        love.graphics.draw(shieldAsset, shield.x - shieldAsset:getWidth() / 2, shield.y - shieldAsset:getHeight() / 2)
+    end
 end
 
 return Ship

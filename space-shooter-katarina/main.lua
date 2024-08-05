@@ -59,7 +59,6 @@ function love.update(dt)
     uiManager:update(dt)
     stars:update(dt)
     collisionManager:checkCollisions(bullets, enemies, ship, dt)
-    collisionManager:updateCollectables(dt)
     
     if gameController:getGameState() ~= "playing" then
         return
@@ -73,7 +72,7 @@ end
 
 
 function love.draw()
-    --love.graphics.draw(AssetsManager.sprites.fireAngles, 0,0 )
+    --love. .draw(AssetsManager.sprites.fireAngles, 0,0 )
     gameController:draw()
     stars:draw()
     bulletSpawner:draw()

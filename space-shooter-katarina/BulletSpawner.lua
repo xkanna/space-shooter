@@ -33,8 +33,8 @@ function BulletSpawner:removeAllBullets()
   end
 end
 
-function BulletSpawner:shoot(x, y)
-  table.insert(bullets, Bullet:new(x, y, Model.bulletParams))
+function BulletSpawner:shoot(x, y, angle)
+  table.insert(bullets, Bullet:new(x, y, angle, Model.bulletParams))
 end
 
 function BulletSpawner:delete(bullet)

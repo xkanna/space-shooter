@@ -1,7 +1,7 @@
 local classes = require("classes")
 local Collectable = classes.class()
 
-function Collectable:init(x, y, asset)
+function Collectable:init(x, y, asset, collectableType)
     
     local collectable = {
       x = x,

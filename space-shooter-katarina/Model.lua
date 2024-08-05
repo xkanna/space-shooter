@@ -42,7 +42,14 @@ Model.enemiesParams = {
  Model.enemyTypes = {
     {speed = 120, points = 2, health = 2},
     {speed = 120, points = 3, health = 3},
-    {speed = 120,points = 1, health = 1}
+    {speed = 120, points = 1, health = 1}
+}
+
+Model.powerUpTypes = {
+    --{assetName = "fireAngles", name = "triple_shot"},
+    --{assetName = "fireRate", name = "fire_rate_boost"},
+    {assetName = "shield", name = "shield"},
+    {assetName = "magnet", name = "magnet"}
 }
     
 
