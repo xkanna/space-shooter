@@ -19,17 +19,26 @@ function EnemySpawner:init(params)
     self.stageWidth = Model.stage.stageWidth
     self.stageHeight = Model.stage.stageHeight
     self.maxNumEnemies = maxNumEnemies
-    self.enemies = enemies
     self.radius = self.w / 2
     self.waveConfig = levels[GameController.instance:getCurrentLevel()].waves
     self.currentWave = 1
     self.isPaused = false
+    
+    self.enemyQueue = {}
+    self:initEnemyQueue(30)
     
     GameController.instance:addListener(function(newState)
         if newState == "start" then
             self:resetSpawner()
         end
     end)
+end
+
+function EnemySpawner:initEnemyQueue(size)
+    for i = 1, size do
+        local enemy = Enemy:new(0, 0, self.asset, self.radius, self:getRandomEnemyType())
+        table.insert(self.enemyQueue, enemy)
+    end
 end
 
 
@@ -41,7 +50,7 @@ function EnemySpawner:update(dt)
     if self.isPaused then
       self:updatePauseTimer(dt)
     else
-      self:spawnEnemies(dt)
+      self:spawnWave(dt)
     end
     
     self:updateEnemies(dt)
@@ -55,10 +64,10 @@ function EnemySpawner:updatePauseTimer(dt)
     end
 end
 
-function EnemySpawner:spawnEnemies(dt)
+function EnemySpawner:spawnWave(dt)
     self.timeSinceLastSpawn = self.timeSinceLastSpawn + dt
     if self.timeSinceLastSpawn >= self.spawnRate then
-        self:spawnWave(self.currentWave)
+        self:spawnEnemies(self.currentWave)
         self.timeSinceLastSpawn = 0
         self.currentWave = self.currentWave + 1
         if self.currentWave > #self.waveConfig then
@@ -69,12 +78,13 @@ function EnemySpawner:spawnEnemies(dt)
 end
 
 function EnemySpawner:updateEnemies(dt)
-    for i=#self.enemies, 1, -1 do
-      local enemy = self.enemies[i]
+    for i=#enemies, 1, -1 do
+      local enemy = enemies[i]
       enemy:update(dt)
       enemy.y = enemy.y + enemy.speed * dt
-      if enemy.y > self.stageHeight then
-        table.remove(self.enemies, i)
+      if enemy.y > self.stageHeight or enemy:IsDead() then
+        table.insert(self.enemyQueue, enemy)
+        table.remove(enemies, i)
       end
     end
 end
@@ -90,8 +100,7 @@ function EnemySpawner:resetSpawner()
     self.isPaused = false
 end
 
-function EnemySpawner:spawnWave(waveIndex)
-  
+function EnemySpawner:spawnEnemies(waveIndex)
     local lines = self.waveConfig[waveIndex].lines
     local count = #lines
     for i=1, count do
@@ -99,7 +108,9 @@ function EnemySpawner:spawnWave(waveIndex)
         local x = self:getSpawnX(position)
         local y = -self.h
         local enemyType = self:getRandomEnemyType()
-        table.insert(self.enemies, Enemy:new(x, y, self.asset, self.radius, enemyType))
+        local enemy = table.remove(self.enemyQueue, 1)
+        enemy:reset(x, y, self.asset, self.radius, enemyType)
+        table.insert(enemies, enemy)
     end
 end
 
@@ -123,6 +134,7 @@ end
 
 function EnemySpawner:removeAllEnemies()
     for i=#enemies, 1, -1 do
+        table.insert(self.enemyQueue, enemies[i])
         table.remove(enemies, i)
     end
 end

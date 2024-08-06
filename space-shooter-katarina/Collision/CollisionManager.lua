@@ -23,7 +23,7 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
             if self:checkBulletEnemyCollision(bullet, enemy) then
                 local isEnemyDead = enemy:takeDamage()
                 if isEnemyDead then 
-                    table.insert(enemiesToRemove, j)
+                    --table.insert(enemiesToRemove, j)
                     createExplosion(enemy.x, enemy.y)
                     local collectable = spawnCollectable(enemy.x, enemy.y)
                     if collectable.type == "regular" then

@@ -13,25 +13,44 @@ function Enemy:new(x, y, asset, radius, enemyType)
         maxHealth = enemyType.health,
         health = enemyType.health,
         points = enemyType.points,
-        isDamaged = false
+        isDamaged = false,
+        isDead = false
     }
     setmetatable(enemy, { __index = Enemy })
     return enemy
+end
+
+function Enemy:reset(x, y, asset, radius, enemyType)
+    self.x = x
+    self.y = y
+    self.w = asset:getWidth()
+    self.h = asset:getHeight()
+    self.asset = asset
+    self.radius = radius
+    self.speed = enemyType.speed
+    self.maxHealth = enemyType.health
+    self.health = enemyType.health
+    self.points = enemyType.points
+    self.isDamaged = false
+    self.isDead = false
 end
 
 function Enemy:update(dt)
   self:checkIfDamaged(dt)
 end
 
+function Enemy:IsDead()
+  return self.isDead
+end
+
 function Enemy:takeDamage()
   self.isDamaged = true
   self.redTimer = 0.3
   self.health = self.health - 1
-  local isDead = false
   if self.health <= 0 then
-    isDead = true
+    self.isDead = true
   end
-  return isDead
+  return self.isDead
 end
 
 function Enemy:checkIfDamaged(dt)
