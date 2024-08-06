@@ -23,12 +23,12 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
     self:sortObjectsIntoQuadrants(bullets, enemies, collectables)
 
     for i = 1, 4 do
-        self:checkQuadrantCollisions(i, ship, dt)
+        self:checkQuadrantCollisions(i, ship, dt) --optimised collision detection
     end
 
     self:checkCollectableShipCollision(ship)
-    self:updateCollectables(collectables, ship, dt)
-    updateExplosions(dt)
+    self:updateCollectables(collectables, ship, dt) -- move them to ship
+    updateExplosions(dt) -- show explosions
 end
 
 function CollisionManager:sortObjectsIntoQuadrants(bullets, enemies, collectables)
@@ -132,7 +132,7 @@ function CollisionManager:shipAndEnemyCollided(ship, enemy)
     enemy.isDead = true
 end
 
-function spawnCollectable(x, y)
+function spawnCollectable(x, y) -- when enemy is defeated spawn random collectable with 10% chance of power up
     local asset = AssetsManager.sprites.coin
     local collectable = Collectable:init(x, y, asset)
 

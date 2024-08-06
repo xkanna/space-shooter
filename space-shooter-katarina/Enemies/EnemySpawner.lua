@@ -48,7 +48,7 @@ function EnemySpawner:update(dt)
     end
     
     if self.isPaused then
-      self:updatePauseTimer(dt)
+      self:updatePauseTimer(dt) -- When all enemies are spawned we have some time left before we can win the level
     else
       self:spawnWave(dt)
     end
@@ -114,7 +114,7 @@ function EnemySpawner:spawnEnemies(waveIndex)
     end
 end
 
-function EnemySpawner:getSpawnX(position)
+function EnemySpawner:getSpawnX(position) -- random x from the position place
     if position == "left" then
         return math.random(self.w, self.stageWidth / 3)
     elseif position == "right" then
@@ -126,7 +126,7 @@ function EnemySpawner:getSpawnX(position)
     end
 end
 
-function EnemySpawner:getRandomEnemyType()
+function EnemySpawner:getRandomEnemyType() -- enemies have random types based on their health and points
     local enemyTypes = Model.enemyTypes
     local randomIndex = math.random(1, #enemyTypes)
     return enemyTypes[randomIndex]

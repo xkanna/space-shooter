@@ -33,8 +33,8 @@ function Ship:init(params)
         if newState == "playing" then
             self:activate()
         elseif newState == "start" then
-            self:deactivate()
             powerUpManager:removeAllPowerUps()
+            self:deactivate()
         end
     end)
   
@@ -84,13 +84,13 @@ end
 function Ship:handleShooting(dt)
     local space = Model.movement.space
     self.timeSinceLastShot = self.timeSinceLastShot + dt
-    if space and self.timeSinceLastShot >= self.fireRate then
+    if space and self.timeSinceLastShot >= self.fireRate then --shooting is done with fire rate
         self:shoot()
         self.timeSinceLastShot = 0
     end
 end
 
-function Ship:checkIfDamaged(dt)
+function Ship:checkIfDamaged(dt) --ship shortly turns red when damaged 
   if self.isDamaged then
         self.redTimer = self.redTimer - dt
         if self.redTimer <= 0 then
@@ -106,9 +106,9 @@ function Ship:shoot()
     end
     
     if self.tripleShot then
-      self:shootTriple()
+      self:shootTriple() --powerUp
     elseif self.tripleShotWide then
-      self:shootTripleWide()
+      self:shootTripleWide() --powerUp
     else
       bulletSpawner.instance:shoot(self.x, self.y - (self.h / 2), 90)
     end
@@ -135,7 +135,7 @@ function Ship:takeDamage()
     gameController.instance:removeLife()
 end
 
-function Ship:collect(collectable)
+function Ship:collect(collectable) --check what powerUp it is
     if collectable.type == "triple_shot" then
         powerUpManager:activatePowerUp(self, "triple_shot", collectable.duration)
     elseif collectable.type == "fire_rate_boost" then
@@ -181,7 +181,7 @@ function Ship:draw()
     love.graphics.setColor(1, 1, 1)
 end
 
-function Ship:updateShield(dt)
+function Ship:updateShield(dt) -- rotate 3 shields around the ship
     local shieldSpeed = 2 * math.pi 
     local numShields = 3 
     local shieldRadius = self.w 
@@ -202,7 +202,7 @@ function Ship:drawShield()
     end
 end
 
-function Ship:drawMagnet()
+function Ship:drawMagnet() -- powerUp
     local magnetAsset = AssetsManager.sprites.magnet
     love.graphics.draw(magnetAsset, self.x - self.w / 2, self.y)
 end

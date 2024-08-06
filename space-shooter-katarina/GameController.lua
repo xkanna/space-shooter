@@ -53,7 +53,7 @@ function GameController:loseGame()
 end
 
 function GameController:resetGame()
-    self:notifyListeners("start")
+    self:notifyListeners("start") --on start screen
 end
 
 function GameController:startGame()
