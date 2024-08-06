@@ -43,7 +43,7 @@ function UiManager:setupUi()
         text = "Gold: " .. gameController.instance:getGold()
     }
     
-    GameController.instance:addListener(function(newState)
+    gameController.instance:addListener(function(newState)
         if newState == "start" then
             playButton.active = true
             levelLabel.active = true
@@ -75,8 +75,8 @@ function UiManager:removeElement(element)
 end
 
 function UiManager:update(dt)
-    livesLabel:setText("Lives: " .. GameController.instance:getLives())
-    goldLabel:setText("Gold: " .. GameController.instance:getGold())
+    livesLabel:setText("Lives: " .. gameController.instance:getLives())
+    goldLabel:setText("Gold: " .. gameController.instance:getGold())
     for _, element in ipairs(self.elements) do
         if element.update then
             element:update(dt)

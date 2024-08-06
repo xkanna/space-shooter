@@ -64,18 +64,19 @@ function CollisionManager:bulletAndEnemyCollided(bullet, enemy)
       createExplosion(enemy.x, enemy.y)
       local collectable = spawnCollectable(enemy.x, enemy.y)
       if collectable.type == "regular" then
-          GameController.instance:addPoints(enemy.points)
+          gameController.instance:addPoints(enemy.points)
       end
     end
-    BulletSpawner.instance:delete(bullet)      
+    bulletSpawner.instance:delete(bullet)      
 end
 
 function CollisionManager:shipAndEnemyCollided(ship, enemy)
     ship:takeDamage()
-    if GameController.instance:getLives() <= 0 then
+    if gameController.instance:getLives() <= 0 then
         createExplosion(enemy.x, enemy.y)
     end
-    table.remove(enemies, i)
+    enemy.isDead = true
+    --table.remove(enemies, i)
 end
 
 function spawnCollectable(x, y)
@@ -127,7 +128,7 @@ function CollisionManager:updateCollectables(collectables, ship, dt) --collectab
             collectable.y = collectable.y + math.sin(angle) * speed * dt
             
             if math.abs(dx) < 5 and math.abs(dy) < 5 then
-                GameController.instance:addGold(1)
+                gameController.instance:addGold(1)
                 table.remove(collectables, i)
             end
         elseif collectable.y > Model.stage.stageHeight then

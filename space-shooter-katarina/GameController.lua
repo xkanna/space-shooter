@@ -27,15 +27,15 @@ function GameController:update(dt)
 end
 
 function GameController:draw()
-    local scoreText = math.floor(self.playerScore)
+    local scoreText = "Score: " .. math.floor(self.playerScore)
     local centerX, centerY = Model.stage.stageWidth / 2, Model.stage.stageHeight / 2
 
     if self.gameState == "playing" then
         love.graphics.print(scoreText, 10, 50)
     elseif self.gameState == "won" then
-        love.graphics.print("You won! Final Score: " .. scoreText, centerX - 120, centerY - 100)
+        love.graphics.print("You won! Final " .. scoreText, centerX - 120, centerY - 100)
     elseif self.gameState == "lost" then
-        love.graphics.print("You lost! Final Score: " .. scoreText, centerX - 120, centerY - 100)
+        love.graphics.print("You lost! Final " .. scoreText, centerX - 120, centerY - 100)
     end
 end
 
