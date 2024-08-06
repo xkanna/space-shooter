@@ -1,10 +1,10 @@
 local classes = require("classes")
-local GameController = require("GameController")
-local AssetsManager = require("AssetsManager")
 local Ship = classes.class()
 local Model = require("Model")
-local BulletSpawner = require("BulletSpawner")
-local PowerUpManager = require("PowerUpManager")
+local GameController = require("GameController")
+local AssetsManager = require("AssetsManager")
+local BulletSpawner = require("Shooting.BulletSpawner")
+local PowerUpManager = require("Collectables.PowerUpManager")
 local powerUpManager = nil
 
 function Ship:init(params)

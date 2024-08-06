@@ -1,11 +1,11 @@
 local classes = require("classes")
 local Model = require("Model")
+local CollisionManager = classes.class()
+
 local GameController = require("GameController")
 local AssetsManager = require("AssetsManager")
-local Bullet = require("Bullet")
-local Collectable = require("Collectable")
-
-local CollisionManager = classes.class()
+local Bullet = require("Shooting.Bullet")
+local Collectable = require("Collectables.Collectable")
 
 local explosions = {} 
 local collectables = {}

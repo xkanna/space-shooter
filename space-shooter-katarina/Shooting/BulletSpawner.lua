@@ -1,7 +1,8 @@
 local Model = require("Model")
-local GameController = require("GameController")
-local Bullet = require("Bullet")
 local BulletSpawner = classes.class()
+
+local GameController = require("GameController")
+local Bullet = require("Shooting.Bullet")
 
 function BulletSpawner:init()
   GameController.instance:addListener(function(newState)

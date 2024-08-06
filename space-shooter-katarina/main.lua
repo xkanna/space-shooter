@@ -8,6 +8,9 @@ io.stdout:setvbuf("no")
 
 ----EXAMPLES: INSTANTIARING A CLASS
 
+local AssetsManager = require("AssetsManager")
+local Model = require("Model")
+
 local GameControllerCls = require("GameController")
 local gameController = nil
 
@@ -17,19 +20,16 @@ local ship = nil
 local StarsCls = require("Stars")
 local stars = nil
 
-local EnemySpawnerCls = require("EnemySpawner")
+local EnemySpawnerCls = require("Enemies.EnemySpawner")
 local enemySpawner = nil
 
-local BulletSpawnerCls = require("BulletSpawner")
+local BulletSpawnerCls = require("Shooting.BulletSpawner")
 local bulletSpawner = nil
 
-local AssetsManager = require("AssetsManager")
-local Model = require("Model")
-
-local CollisionManagerCls = require("CollisionManager")
+local CollisionManagerCls = require("Collision.CollisionManager")
 local collisionManager = nil
 
-local UiManager = require("UiClasses.UiManager")
+local UiManager = require("Ui.UiManager")
 
 local LEFT_KEY = "left"
 local RIGHT_KEY = "right"

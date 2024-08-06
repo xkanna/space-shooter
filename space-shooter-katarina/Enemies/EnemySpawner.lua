@@ -1,7 +1,8 @@
 local Model = require("Model")
-local GameController = require("GameController")
 local EnemySpawner = classes.class()
-local Enemy = require("Enemy")
+
+local GameController = require("GameController")
+local Enemy = require("Enemies.Enemy")
 local levels = require("Levels")
 
 local timer = 0

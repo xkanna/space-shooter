@@ -1,10 +1,9 @@
 local classes = require("classes")
-local Model = require("Model")
-local Button = require("UiClasses.Button")
-local Label = require("UiClasses.Label")
-local GameController = require("GameController")
-
 local UiManager = classes.class()
+local Model = require("Model")
+local Button = require("Ui.Button")
+local Label = require("Ui.Label")
+local GameController = require("GameController")
 
 function UiManager:init()
     self.elements = {}
