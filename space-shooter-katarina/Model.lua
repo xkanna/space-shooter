@@ -46,10 +46,10 @@ Model.enemiesParams = {
 }
 
 Model.powerUpTypes = {
-    --{assetName = "fireAngles", name = "triple_shot"},
-    --{assetName = "fireRate", name = "fire_rate_boost"},
-    {assetName = "shield", name = "shield"},
-    {assetName = "magnet", name = "magnet"}
+    {assetName = "fireAngles", name = "triple_shot", duration = 5},
+    {assetName = "fireRate", name = "fire_rate_boost", duration = 5},
+    {assetName = "shield", name = "shield", duration = 5},
+    {assetName = "magnet", name = "magnet", duration = 3}
 }
     
 

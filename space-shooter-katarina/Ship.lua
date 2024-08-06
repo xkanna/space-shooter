@@ -5,6 +5,7 @@ local Ship = classes.class()
 local Model = require("Model")
 local BulletSpawner = require("BulletSpawner")
 local PowerUpManager = require("PowerUpManager")
+local powerUpManager = nil
 
 function Ship:init(params)
     print("Ship init!")
@@ -34,6 +35,8 @@ function Ship:init(params)
             self:deactivate()
         end
     end)
+  
+    powerUpManager = PowerUpManager.new()
 end
 
 function Ship:update(dt)
@@ -74,6 +77,8 @@ function Ship:update(dt)
     if self.shieldActive then
         self:updateShield(dt)
     end
+    
+    powerUpManager:update(dt)
 end
 
 function Ship:checkIfDamaged(dt)
@@ -96,9 +101,9 @@ function Ship:shoot()
         BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 90)
         BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 90)
     elseif self.tripleShotWide then
-        BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 150)
+        BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 120)
         BulletSpawner:shoot(self.x , self.y - (self.h / 2), 90)
-        BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 30)
+        BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 60)
     else
         BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
     end
@@ -115,13 +120,13 @@ end
 
 function Ship:collect(collectable)
     if collectable.type == "triple_shot" then
-        PowerUpManager:activatePowerUp(self, "triple_shot", 5)
+        powerUpManager:activatePowerUp(self, "triple_shot", collectable.duration)
     elseif collectable.type == "fire_rate_boost" then
-        PowerUpManager:activatePowerUp(self, "fire_rate_boost", 5)
+        powerUpManager:activatePowerUp(self, "fire_rate_boost", collectable.duration)
     elseif collectable.type == "shield" then
-        PowerUpManager:activatePowerUp(self, "shield", 5)
+        powerUpManager:activatePowerUp(self, "shield", collectable.duration)
     elseif collectable.type == "magnet" then
-        PowerUpManager:activatePowerUp(self, "magnet", 5) 
+        powerUpManager:activatePowerUp(self, "magnet", collectable.duration) 
     end
 end
 
@@ -147,6 +152,7 @@ function Ship:draw()
     end
     
     love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
+    
     if self.shieldActive then
         self:drawShield()
     end

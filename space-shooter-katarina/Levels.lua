@@ -58,7 +58,40 @@ local levels = {
                 {position = "center"},
                 {position = "right"}
               }
-            }
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"},
+                {position = "right"}
+              },
+            },
         }
     },
     {
@@ -159,6 +192,78 @@ local levels = {
                 {position = "center"},
                 {position = "right"}
               },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
             }
         }
     },
@@ -250,80 +355,107 @@ local levels = {
                 {position = "left"}, 
                 {position = "right"}
               },
-            }
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "center"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}
+              },
+            },
+            {
+              lines = {
+                {position = "right"}
+              },
+            },
         }
     },
     {
         waves = {
             {
               lines = {
-                {position = "left"}, 
-                {position = "center"},
                 {position = "right"}
               },
             },
             {
               lines = {
-                {position = "center"}
-              },
-            },
-            {
-              lines = {
-                {position = "center"}
-              },
-            },
-            {
-              lines = {
-                {position = "left"}, 
-                {position = "center"},
                 {position = "right"}
               },
             },
             {
               lines = {
-                {position = "left"}, 
-                {position = "center"},
+                {position = "left"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}
+              },
+            },
+            {
+              lines = {
                 {position = "right"}
               },
             },
             {
               lines = {
-                {position = "left"}, 
-                {position = "center"},
                 {position = "right"}
               },
             },
             {
               lines = {
-                {position = "left"}, 
-                {position = "center"},
-                {position = "right"}
+                {position = "left"}
               },
             },
             {
               lines = {
-                {position = "center"}
+                {position = "left"}
               },
             },
             {
               lines = {
-                {position = "left"}, 
-                {position = "center"},
-                {position = "right"}
+                {position = "left"}
               },
             },
             {
               lines = {
-                {position = "left"}, 
                 {position = "center"},
-                {position = "right"}
-              },
-            },
-            {
-              lines = {
-                {position = "left"}, 
-                {position = "center"},
-                {position = "right"}
               },
             },
             {
@@ -348,7 +480,21 @@ local levels = {
             },
             {
               lines = {
-                {position = "center"}
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
+              },
+            },
+            {
+              lines = {
+                {position = "left"}, 
+                {position = "center"},
+                {position = "right"}
               },
             },
             {
@@ -374,16 +520,15 @@ local levels = {
             },
             {
               lines = {
+                {position = "left"}, 
+                {position = "center"},
                 {position = "right"}
               },
             },
             {
               lines = {
-                {position = "right"}
-              },
-            },
-            {
-              lines = {
+                {position = "left"}, 
+                {position = "center"},
                 {position = "right"}
               },
             },

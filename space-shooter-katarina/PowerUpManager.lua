@@ -17,12 +17,12 @@ function PowerUpManager:applyPowerUp(ship, powerUpType)
     if powerUpType == "triple_shot" then
         ship.tripleShotWide = true
     elseif powerUpType == "fire_rate_boost" then
-        ship.fireRate = ship.fireRate / 1.1
+        ship.fireRate = 0.09
         ship.tripleShot = true
     elseif powerUpType == "shield" then
         ship.shieldActive = true
     elseif powerUpType == "magnet" then
-        ship.coinRadius = ship.coinRadius * 10
+        ship.coinRadius = ship.coinRadius * 5
     end
 end
 
@@ -30,12 +30,12 @@ function PowerUpManager:removePowerUp(ship, powerUpType)
     if powerUpType == "triple_shot" then
         ship.tripleShotWide = false
     elseif powerUpType == "fire_rate_boost" then
-        ship.fireRate = ship.fireRate * 1.1 
+        ship.fireRate = 0.1 
         ship.tripleShot = false
     elseif powerUpType == "shield" then
         ship.shieldActive = false
     elseif powerUpType == "magnet" then
-        ship.coinRadius = ship.coinRadius / 10
+        ship.coinRadius = ship.coinRadius / 5
     end
 end
 

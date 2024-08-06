@@ -27,9 +27,8 @@ function CollisionManager:checkCollisions(bullets, enemies, ship, dt)
                     createExplosion(enemy.x, enemy.y)
                     local collectable = spawnCollectable(enemy.x, enemy.y)
                     if collectable.type == "regular" then
-                      GameController.instance:addPoints(enemy.points)
+                        GameController.instance:addPoints(enemy.points)
                     end
-                    ship:collect(collectable)
                 end
                 table.insert(bulletsToRemove, i)
                 break
@@ -72,6 +71,7 @@ function spawnCollectable(x, y)
         local powerUpType = Model.powerUpTypes[math.random(#Model.powerUpTypes)]
         collectable.type = powerUpType.name
         collectable.asset = AssetsManager.sprites[powerUpType.assetName]
+        collectable.duration = powerUpType.duration
     else
         collectable.type = "regular" 
     end
@@ -90,13 +90,14 @@ function CollisionManager:checkCollectableShipCollision(ship)
         
         if distance < (ship.coinRadius + collectable.radius) then
             collectable.isCollected = true
+            ship:collect(collectable)
         end
     end
 end
 
 
 function CollisionManager:updateCollectables(collectables, ship, dt)
-    local speed = 500  -
+    local speed = 500
 
     for i = #collectables, 1, -1 do
         local collectable = collectables[i]
