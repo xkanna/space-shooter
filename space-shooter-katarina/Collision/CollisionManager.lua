@@ -88,7 +88,7 @@ function CollisionManager:checkCollectableShipCollision(ship)
         local dy = ship.y - collectable.y
         local distance = math.sqrt(dx * dx + dy * dy)
         
-        if distance < (ship.coinRadius + collectable.radius) then
+        if distance < (ship.collectingRadius + collectable.radius) then
             collectable.isCollected = true
             ship:collect(collectable)
         end

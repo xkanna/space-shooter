@@ -22,7 +22,8 @@ function PowerUpManager:applyPowerUp(ship, powerUpType)
     elseif powerUpType == "shield" then
         ship.shieldActive = true
     elseif powerUpType == "magnet" then
-        ship.coinRadius = ship.coinRadius * 5
+        ship.collectingRadius = ship.collectingRadius * 5
+        ship.magnetActive = true
     end
 end
 
@@ -35,7 +36,8 @@ function PowerUpManager:removePowerUp(ship, powerUpType)
     elseif powerUpType == "shield" then
         ship.shieldActive = false
     elseif powerUpType == "magnet" then
-        ship.coinRadius = ship.coinRadius / 5
+        ship.collectingRadius = ship.collectingRadius / 5
+        ship.magnetActive = false
     end
 end
 

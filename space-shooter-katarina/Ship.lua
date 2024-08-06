@@ -20,7 +20,7 @@ function Ship:init(params)
     self.fireRate = params.fireRate
     self.timeSinceLastShot = 0 
     self.radius = self.w / 2
-    self.coinRadius = self.w / 2
+    self.collectingRadius = self.w / 2
     self.isDamaged = false
     self.tripleShot = false
     self.tripleShotWide = false
@@ -155,7 +155,11 @@ function Ship:draw()
     love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
     
     if self.shieldActive then
-        self:drawShield()
+      self:drawShield()
+    end
+    
+    if self.magnetActive then
+      self:drawMagnet()
     end
     
     love.graphics.setColor(1, 1, 1) -- this resets color after drawing the ship
@@ -180,6 +184,11 @@ function Ship:drawShield()
     for _, shield in ipairs(self.shieldSprites) do
         love.graphics.draw(shieldAsset, shield.x - shieldAsset:getWidth() / 2, shield.y - shieldAsset:getHeight() / 2)
     end
+end
+
+function Ship:drawMagnet()
+    local magnetAsset = AssetsManager.sprites.magnet
+    love.graphics.draw(magnetAsset, self.x - self.w / 2, self.y)
 end
 
 return Ship
