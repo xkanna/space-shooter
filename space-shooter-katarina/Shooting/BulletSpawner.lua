@@ -5,7 +5,7 @@ local GameController = require("GameController")
 local Bullet = require("Shooting.Bullet")
 
 function BulletSpawner:init()
-  GameController.instance:addListener(function(newState)
+    GameController.instance:addListener(function(newState)
         if newState == "start" then
             self:removeAllBullets()
         end

@@ -1,6 +1,5 @@
 local Model = require("Model")
 local EnemySpawner = classes.class()
-
 local GameController = require("GameController")
 local Enemy = require("Enemies.Enemy")
 local levels = require("Levels")
@@ -28,14 +27,7 @@ function EnemySpawner:init(params)
     
     GameController.instance:addListener(function(newState)
         if newState == "start" then
-            self:removeAllEnemies()
-            self.currentWave = 1
-            local level = GameController.instance:getCurrentLevel()
-            if(level > #levels) then
-              level = 1
-            end
-            self.waveConfig = levels[level].waves
-            self.isPaused = false
+            self:resetSpawner()
         end
     end)
 end
@@ -47,32 +39,55 @@ function EnemySpawner:update(dt)
     end
     
     if self.isPaused then
-      timer = timer + dt
-      if timer >= waitTime then
-        GameController.instance:winGame()
-        timer = 0
-      end
+      self:updatePauseTimer(dt)
     else
-      self.timeSinceLastSpawn = self.timeSinceLastSpawn + dt
-      if self.timeSinceLastSpawn >= self.spawnRate then
-          self:spawnWave(self.currentWave)
-          self.timeSinceLastSpawn = 0
-          self.currentWave = self.currentWave + 1
-          if self.currentWave > #self.waveConfig then
-              self.isPaused = true
-              self.currentWave = 1
-          end
-      end
+      self:spawnEnemies(dt)
     end
     
-    for i=#self.enemies, 1, -1 do
-        local enemy = self.enemies[i]
-        enemy:update(dt)
-        enemy.y = enemy.y + enemy.speed * dt
-        if enemy.y > self.stageHeight then
-            table.remove(self.enemies, i)
+    self:updateEnemies(dt)
+end
+
+function EnemySpawner:updatePauseTimer(dt)
+    timer = timer + dt
+    if timer >= waitTime then
+      GameController.instance:winGame()
+      timer = 0
+    end
+end
+
+function EnemySpawner:spawnEnemies(dt)
+    self.timeSinceLastSpawn = self.timeSinceLastSpawn + dt
+    if self.timeSinceLastSpawn >= self.spawnRate then
+        self:spawnWave(self.currentWave)
+        self.timeSinceLastSpawn = 0
+        self.currentWave = self.currentWave + 1
+        if self.currentWave > #self.waveConfig then
+            self.isPaused = true
+            self.currentWave = 1
         end
     end
+end
+
+function EnemySpawner:updateEnemies(dt)
+    for i=#self.enemies, 1, -1 do
+      local enemy = self.enemies[i]
+      enemy:update(dt)
+      enemy.y = enemy.y + enemy.speed * dt
+      if enemy.y > self.stageHeight then
+        table.remove(self.enemies, i)
+      end
+    end
+end
+
+function EnemySpawner:resetSpawner()
+    self:removeAllEnemies()
+    self.currentWave = 1
+    local level = GameController.instance:getCurrentLevel()
+    if(level > #levels) then
+        level = 1
+    end
+    self.waveConfig = levels[level].waves
+    self.isPaused = false
 end
 
 function EnemySpawner:spawnWave(waveIndex)
@@ -100,7 +115,6 @@ function EnemySpawner:getSpawnX(position)
     end
 end
 
-
 function EnemySpawner:getRandomEnemyType()
     local enemyTypes = Model.enemyTypes
     local randomIndex = math.random(1, #enemyTypes)
@@ -109,13 +123,11 @@ end
 
 function EnemySpawner:removeAllEnemies()
     for i=#enemies, 1, -1 do
-        local enemy = enemies[i]
         table.remove(enemies, i)
     end
 end
 
 function EnemySpawner:draw()
-  
     for _, enemy in ipairs(enemies) do
         enemy:draw()
     end

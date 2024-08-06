@@ -21,30 +21,35 @@ function GameController:init(params)
 end
 
 function GameController:update(dt)
-    if self.gameState == "playing" then
-        if self.currentLives <= 0 then
-            self.gameState = "lost"
-            self:notifyListeners("lost")
-            self:resetGame()
-        end
+    if self.gameState == "playing" and self.currentLives <= 0 then
+        self:loseGame()
     end
 end
 
 function GameController:draw()
+    local scoreText = math.floor(self.playerScore)
+    local centerX, centerY = Model.stage.stageWidth / 2, Model.stage.stageHeight / 2
+
     if self.gameState == "playing" then
-        love.graphics.print("Score: " .. math.floor(self.playerScore), 10, 50)
+        love.graphics.print(scoreText, 10, 50)
     elseif self.gameState == "won" then
-        love.graphics.print("You won! Final Score: " .. math.floor(self.playerScore), Model.stage.stageWidth / 2 - 100, Model.stage.stageHeight / 2 -100)
+        love.graphics.print("You won! Final Score: " .. scoreText, centerX - 120, centerY - 100)
     elseif self.gameState == "lost" then
-        love.graphics.print("You lost! Final Score: " .. math.floor(self.playerScore), Model.stage.stageWidth / 2 - 100, Model.stage.stageHeight / 2- 100)
+        love.graphics.print("You lost! Final Score: " .. scoreText, centerX - 120, centerY - 100)
     end
 end
 
 function GameController:winGame()
-      self.gameState = "won"
-      self.currentLevel = self.currentLevel + 1
-      self:notifyListeners("won")
-      self:resetGame()
+    self.gameState = "won"
+    self.currentLevel = self.currentLevel + 1
+    self:notifyListeners("won")
+    self:resetGame()
+end
+
+function GameController:loseGame()
+    self.gameState = "lost"
+    self:notifyListeners("lost")
+    self:resetGame()
 end
 
 function GameController:resetGame()

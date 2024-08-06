@@ -22,6 +22,7 @@ function Ship:init(params)
     self.radius = self.w / 2
     self.collectingRadius = self.w / 2
     self.isDamaged = false
+    
     self.tripleShot = false
     self.tripleShotWide = false
     self.shieldActive = false
@@ -41,11 +42,22 @@ function Ship:init(params)
 end
 
 function Ship:update(dt)
+    self:handleMovement(dt)
+    self:handleShooting(dt)
+    self:checkIfDamaged(dt)
+    
+    if self.shieldActive then
+        self:updateShield(dt)
+    end
+    
+    powerUpManager:update(dt)
+end
+
+function Ship:handleMovement(dt)
     local left = Model.movement.left
     local right = Model.movement.right
     local up = Model.movement.up
     local down = Model.movement.down
-    local space = Model.movement.space
     local stageWidth = Model.stage.stageWidth
     local stageHeight = Model.stage.stageHeight
 
@@ -67,19 +79,15 @@ function Ship:update(dt)
     
     self.x = self.x + x * self.speed * dt
     self.y = self.y + y * self.speed * dt
-    
+end
+
+function Ship:handleShooting(dt)
+    local space = Model.movement.space
     self.timeSinceLastShot = self.timeSinceLastShot + dt
     if space and self.timeSinceLastShot >= self.fireRate then
         self:shoot()
         self.timeSinceLastShot = 0
     end
-    self:checkIfDamaged(dt)
-    
-    if self.shieldActive then
-        self:updateShield(dt)
-    end
-    
-    powerUpManager:update(dt)
 end
 
 function Ship:checkIfDamaged(dt)
@@ -94,29 +102,37 @@ end
 
 function Ship:shoot()
     if not self.active then
-        return
+      return
     end
     
     if self.tripleShot then
-        BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
-        BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 90)
-        BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 90)
+      self:shootTriple()
     elseif self.tripleShotWide then
-        BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 120)
-        BulletSpawner:shoot(self.x , self.y - (self.h / 2), 90)
-        BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 60)
+      self:shootTripleWide()
     else
-        BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
+      BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
     end
 end
 
+function Ship:shootTriple()
+    BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
+    BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 90)
+    BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 90)
+end
+
+function Ship:shootTripleWide()
+    BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 120)
+    BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
+    BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 60)
+end
+
 function Ship:takeDamage()
-  if self.shieldActive then
-    return
-  end
-  self.isDamaged = true
-  self.redTimer = 0.3
-  GameController.instance:removeLife()
+    if self.shieldActive then
+      return
+    end
+    self.isDamaged = true
+    self.redTimer = 0.3
+    GameController.instance:removeLife()
 end
 
 function Ship:collect(collectable)
@@ -132,14 +148,14 @@ function Ship:collect(collectable)
 end
 
 function Ship:deactivate()
-  self.active = false
+    self.active = false
 end
 
 function Ship:activate()
-  self.active = true
-  self.x = Model.stage.stageWidth / 2
-  self.y = Model.stage.stageHeight / 1.5
-  self.currentHealth = self.maxHealth
+    self.active = true
+    self.x = Model.stage.stageWidth / 2
+    self.y = Model.stage.stageHeight / 1.5
+    self.currentHealth = self.maxHealth
 end
 
 function Ship:draw()
@@ -162,15 +178,15 @@ function Ship:draw()
       self:drawMagnet()
     end
     
-    love.graphics.setColor(1, 1, 1) -- this resets color after drawing the ship
+    love.graphics.setColor(1, 1, 1)
 end
 
 function Ship:updateShield(dt)
     local shieldSpeed = 2 * math.pi 
     local numShields = 3 
     local shieldRadius = self.w 
-
     self.shieldSprites = {}
+    
     for i = 1, numShields do
         local angle = (i - 1) * (2 * math.pi / numShields) + love.timer.getTime() * shieldSpeed
         local shieldX = self.x + math.cos(angle) * shieldRadius

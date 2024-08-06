@@ -21,7 +21,6 @@ function Bullet:update(dt)
     self.y = self.y - math.sin(self.angle) * self.speed * dt
 end
 
-
 function Bullet:draw()
     love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
 end
