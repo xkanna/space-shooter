@@ -27,7 +27,7 @@ function EnemySpawner:init(params)
     self.enemyQueue = {}
     self:initEnemyQueue(30)
     
-    GameController.instance:addListener(function(newState)
+    gameController.instance:addListener(function(newState)
         if newState == "start" then
             self:resetSpawner()
         end
@@ -43,7 +43,7 @@ end
 
 
 function EnemySpawner:update(dt)
-    if GameController.instance:getGameState() ~= "playing" then
+    if gameController.instance:getGameState() ~= "playing" then
         return
     end
     
@@ -59,7 +59,7 @@ end
 function EnemySpawner:updatePauseTimer(dt)
     timer = timer + dt
     if timer >= waitTime then
-      GameController.instance:winGame()
+      gameController.instance:winGame()
       timer = 0
     end
 end
@@ -92,7 +92,7 @@ end
 function EnemySpawner:resetSpawner()
     self:removeAllEnemies()
     self.currentWave = 1
-    local level = GameController.instance:getCurrentLevel()
+    local level = gameController.instance:getCurrentLevel()
     if(level > #levels) then
         level = 1
     end

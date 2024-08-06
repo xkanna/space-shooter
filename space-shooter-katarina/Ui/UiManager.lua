@@ -20,7 +20,7 @@ function UiManager:setupUi()
     }
     
     playButton.onClick = function()
-      GameController.instance:startGame()
+      gameController.instance:startGame()
       playButton.active = false
       levelLabel.active = false
     end
@@ -28,26 +28,26 @@ function UiManager:setupUi()
     livesLabel = self:addLabel{
         x = 10,
         y = 10,
-        text = "Lives: " .. GameController.instance:getLives()
+        text = "Lives: " .. gameController.instance:getLives()
     }
     
     levelLabel = self:addLabel{
         x = Model.stage.stageWidth / 2 - 50,
         y = Model.stage.stageHeight / 2 - 50,
-        text = "Level: " .. GameController.instance:getCurrentLevel(),
+        text = "Level: " .. gameController.instance:getCurrentLevel(),
     }
     
     goldLabel = self:addLabel{
         x = 10,
         y = 30,
-        text = "Gold: " .. GameController.instance:getGold()
+        text = "Gold: " .. gameController.instance:getGold()
     }
     
     GameController.instance:addListener(function(newState)
         if newState == "start" then
             playButton.active = true
             levelLabel.active = true
-            local level = GameController.instance:getCurrentLevel()
+            local level = gameController.instance:getCurrentLevel()
             levelLabel:setText("Level: " .. level)
         end
     end)

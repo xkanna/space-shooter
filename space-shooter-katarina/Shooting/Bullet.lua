@@ -16,6 +16,12 @@ function Bullet:new(x, y, angle, params)
     return bullet
 end
 
+function Bullet:reset(x, y, angle)
+    self.x = x
+    self.y = y
+    self.angle = math.rad(angle)
+end
+
 function Bullet:update(dt)
     self.x = self.x + math.cos(self.angle) * self.speed * dt
     self.y = self.y - math.sin(self.angle) * self.speed * dt

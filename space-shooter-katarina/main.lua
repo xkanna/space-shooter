@@ -12,7 +12,10 @@ local AssetsManager = require("AssetsManager")
 local Model = require("Model")
 
 local GameControllerCls = require("GameController")
-local gameController = nil
+gameController = nil
+
+local BulletSpawnerCls = require("Shooting.BulletSpawner")
+bulletSpawner = nil
 
 local ShipCls = require("Ship")
 local ship = nil
@@ -22,9 +25,6 @@ local stars = nil
 
 local EnemySpawnerCls = require("Enemies.EnemySpawner")
 local enemySpawner = nil
-
-local BulletSpawnerCls = require("Shooting.BulletSpawner")
-local bulletSpawner = nil
 
 local CollisionManagerCls = require("Collision.CollisionManager")
 local collisionManager = nil
@@ -48,8 +48,8 @@ function love.load()
     stars = StarsCls.new( Model.starsParams)
     ship = ShipCls.new( Model.shipParams )
     enemySpawner = EnemySpawnerCls.new( Model.enemiesParams )
-    bulletSpawner = BulletSpawnerCls.new()
     collisionManager = CollisionManagerCls.new()
+    bulletSpawner = BulletSpawnerCls.new()
     uiManager = UiManager:new()
 end
 
@@ -58,8 +58,8 @@ function love.update(dt)
     gameController:update(dt)
     uiManager:update(dt)
     stars:update(dt)
-    collisionManager:checkCollisions(bullets, enemies, ship, dt)
     bulletSpawner:update(dt)
+    collisionManager:checkCollisions(bullets, enemies, ship, dt)
     
     if gameController:getGameState() ~= "playing" then
         return
@@ -67,7 +67,6 @@ function love.update(dt)
     
     ship:update(dt)
     enemySpawner:update(dt)
-  
 end
 
 
@@ -75,8 +74,8 @@ function love.draw()
     --love. .draw(AssetsManager.sprites.fireAngles, 0,0 )
     gameController:draw()
     stars:draw()
-    bulletSpawner:draw()
     enemySpawner:draw()
+    bulletSpawner:draw()
     collisionManager:draw()
     uiManager:draw()
     ship:draw()

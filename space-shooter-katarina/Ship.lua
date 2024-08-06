@@ -29,7 +29,7 @@ function Ship:init(params)
     self.magnetActive = false
     self.shieldSprites = {} 
     
-    GameController.instance:addListener(function(newState)
+    gameController.instance:addListener(function(newState)
         if newState == "playing" then
             self:activate()
         elseif newState == "start" then
@@ -110,20 +110,20 @@ function Ship:shoot()
     elseif self.tripleShotWide then
       self:shootTripleWide()
     else
-      BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
+      bulletSpawner.instance:shoot(self.x, self.y - (self.h / 2), 90)
     end
 end
 
 function Ship:shootTriple()
-    BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
-    BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 90)
-    BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 90)
+    bulletSpawner.instance:shoot(self.x, self.y - (self.h / 2), 90)
+    bulletSpawner.instance:shoot(self.x - 20, self.y - (self.h / 2), 90)
+    bulletSpawner.instance:shoot(self.x + 20, self.y - (self.h / 2), 90)
 end
 
 function Ship:shootTripleWide()
-    BulletSpawner:shoot(self.x - 20, self.y - (self.h / 2), 120)
-    BulletSpawner:shoot(self.x, self.y - (self.h / 2), 90)
-    BulletSpawner:shoot(self.x + 20, self.y - (self.h / 2), 60)
+    bulletSpawner.instance:shoot(self.x - 20, self.y - (self.h / 2), 120)
+    bulletSpawner.instance:shoot(self.x, self.y - (self.h / 2), 90)
+    bulletSpawner.instance:shoot(self.x + 20, self.y - (self.h / 2), 60)
 end
 
 function Ship:takeDamage()
@@ -132,7 +132,7 @@ function Ship:takeDamage()
     end
     self.isDamaged = true
     self.redTimer = 0.3
-    GameController.instance:removeLife()
+    gameController.instance:removeLife()
 end
 
 function Ship:collect(collectable)
