@@ -59,13 +59,13 @@ function love.update(dt)
     uiManager:update(dt)
     stars:update(dt)
     collisionManager:checkCollisions(bullets, enemies, ship, dt)
+    bulletSpawner:update(dt)
     
     if gameController:getGameState() ~= "playing" then
         return
     end
     
     ship:update(dt)
-    bulletSpawner:update(dt)
     enemySpawner:update(dt)
   
 end

@@ -10,6 +10,7 @@ function Enemy:new(x, y, asset, radius, enemyType)
         asset = asset,
         radius = radius,
         speed = enemyType.speed,
+        maxHealth = enemyType.health,
         health = enemyType.health,
         points = enemyType.points,
         isDamaged = false
@@ -51,7 +52,27 @@ function Enemy:draw()
     end
     
     love.graphics.draw(self.asset, self.x - self.w / 2, self.y - self.h / 2)
+    
+     self:drawHealthBar()
+     
     love.graphics.setColor(1, 1, 1)
+end
+
+function Enemy:drawHealthBar()
+  local barWidth = self.w / 2
+  local barHeight = 5
+  local barX = self.x - barWidth / 2
+  local barY = self.y - self.h / 2 - barHeight - 2
+  
+  local healthWidth = barWidth * (self.health / self.maxHealth)
+  
+  love.graphics.setColor(0.5, 0.5, 0.5)
+  love.graphics.rectangle("fill", barX, barY, barWidth, barHeight)
+  
+  love.graphics.setColor(0, 1, 0)
+  love.graphics.rectangle("fill", barX, barY, healthWidth, barHeight)
+  
+  love.graphics.setColor(1, 1, 1)
 end
 
 return Enemy

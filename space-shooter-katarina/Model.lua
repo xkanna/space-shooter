@@ -40,9 +40,9 @@ Model.enemiesParams = {
 }
 
  Model.enemyTypes = {
-    {speed = 120, points = 2, health = 2},
     {speed = 120, points = 3, health = 3},
-    {speed = 120, points = 1, health = 1}
+    {speed = 120, points = 4, health = 4},
+    {speed = 120, points = 2, health = 2}
 }
 
 Model.powerUpTypes = {

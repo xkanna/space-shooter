@@ -50,4 +50,12 @@ function PowerUpManager:update(dt)
     end
 end
 
+function PowerUpManager:removeAllPowerUps()
+  for i = #powerUps, 1, -1 do
+    local powerUp = powerUps[i]
+    self:removePowerUp(powerUp.ship, powerUp.type)
+    table.remove(powerUps, i)
+  end
+end
+
 return PowerUpManager

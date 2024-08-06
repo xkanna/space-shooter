@@ -105,18 +105,17 @@ function CollisionManager:updateCollectables(collectables, ship, dt)
             local dx = ship.x - collectable.x
             local dy = ship.y - collectable.y
             
-            -- Calculate the angle to the ship
             local angle = math.atan2(dy, dx)
             
-            -- Update the position using the constant speed
             collectable.x = collectable.x + math.cos(angle) * speed * dt
             collectable.y = collectable.y + math.sin(angle) * speed * dt
             
-            -- Check if the collectable is close enough to the ship
             if math.abs(dx) < 5 and math.abs(dy) < 5 then
                 GameController.instance:addGold(1)
                 table.remove(collectables, i)
             end
+        elseif collectable.y > Model.stage.stageHeight then
+             table.remove(collectables, i)
         else
             collectable:update(dt)
         end

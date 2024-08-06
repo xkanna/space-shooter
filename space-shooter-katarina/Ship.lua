@@ -33,6 +33,7 @@ function Ship:init(params)
             self:activate()
         elseif newState == "start" then
             self:deactivate()
+            powerUpManager:removeAllPowerUps()
         end
     end)
   

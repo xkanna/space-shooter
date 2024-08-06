@@ -91,7 +91,7 @@ function EnemySpawner:getSpawnX(position)
     if position == "left" then
         return math.random(self.w, self.stageWidth / 3)
     elseif position == "right" then
-        return math.random(2 * self.stageWidth / 3, self.stageWidth)
+        return math.random(2 * self.stageWidth / 3, self.stageWidth - self.w)
     elseif position == "center" then
         return math.random(self.stageWidth / 3, 2 * self.stageWidth / 3)
     else
